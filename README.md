@@ -1,6 +1,7 @@
 # pdb2fasta
 
 Author: Samiur Khan, samkhan@umich.edu
+
 Ackowledgements: Zhang Lab, Department of Computational Medicine and
 Bioinformatics at University of Michigan
 
