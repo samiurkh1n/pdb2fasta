@@ -29,7 +29,8 @@ For example, running
 ```bash
 ./pdb2fasta ./1tpo.pdb
 ```
-will produce a `1tpo.fasta` file.
+will produce a `1tpo.fasta` file. The fasta file will be stored in the same
+directory as the pdb file.
 
 ### Assumptions about the PDB file
 
