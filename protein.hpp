@@ -14,7 +14,7 @@ public:
 
   // Parses ATOM record from a PDB file and stores the amino acid of a residue.
   // The function is sensitive to the residue identifier.
-  void ParsePDBRecord(std::string record);
+  void ParsePDBRecord(std::string record, bool& model_read);
 
   // Generates the FASTA formatted string of the amino acids.
   std::string GenerateFASTAofAminoAcids();
@@ -29,7 +29,7 @@ private:
   std::unordered_map<std::string, std::string> pdb_acid_to_fasta_acid();
   std::unordered_map<std::string, std::string> acid_map_;
 
-  int current_residue_id_ = -1;
+  std::string current_residue_id_ = "";
 
   std::string protein_id_ = "";
 

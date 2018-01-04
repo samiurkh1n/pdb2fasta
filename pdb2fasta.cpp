@@ -5,7 +5,7 @@
 // Usage:
 // ./pdb2fasta [pdb file]
 
-#include "protein.h"
+#include "protein.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -29,12 +29,14 @@ int main(int argc, char* argv[]) {
 
   std::string fasta_filename = protein_id + ".fasta";
   std::ofstream fasta_file;
-  fasta_file.open(fasta_filename);
+  fasta_file.open(fasta_filename.c_str());
 
   Protein protein(protein_id);
   std::string record = "";
+  bool model_read = false;
   while(std::getline(pdb_file, record)) {
-    protein.ParsePDBRecord(record);
+    protein.ParsePDBRecord(record, model_read);
+    if (model_read) break;
   }
 
   fasta_file << protein.GenerateFASTAofAminoAcids();

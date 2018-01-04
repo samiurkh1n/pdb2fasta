@@ -13,6 +13,6 @@ debug: $(PROJECTFILE) protein.o
 	g++ $(DBGFLAGS) $(PROJECTFILE) protein.cpp -o pdb2fasta_debug
 
 clean:
-	rm -rf $(EXECUTABLE) $(EXECUTABLE)_debug $(EXECUTABLE)_debug.dSYM *.o
+	rm -rf $(EXECUTABLE) $(EXECUTABLE)_debug $(EXECUTABLE)_debug.dSYM *.o *~
 
 .PHONY: main debug clean

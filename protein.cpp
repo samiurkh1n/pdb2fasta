@@ -1,27 +1,7 @@
 // Implementation of PDB To Fasta Utilities
 
-#include "protein.h"
+#include "protein.hpp"
 #include <algorithm>
-
-std::vector<std::string>
-vectorize_string(std::string input, char delimiter = ' ') {
-  std::vector<std::string> vectorized;
-  std::string::const_iterator start = input.begin();
-  std::string::const_iterator end = input.end();
-  std::string::const_iterator split_point = find(start, end, delimiter);
-  while (split_point != end) {
-      if (start != split_point)
-	vectorized.push_back(std::string(start, split_point));
-      start = split_point + 1;
-      split_point = std::find(start, end, delimiter);
-  }
-
-  // also insert the last substring past the delimiter
-  if (start != split_point) {
-    vectorized.push_back(std::string(start, split_point));
-  }
-  return vectorized;
-}
 
 std::unordered_map<std::string, std::string> Protein::pdb_acid_to_fasta_acid() {
   std::unordered_map<std::string, std::string> acid_mapping;
@@ -57,17 +37,26 @@ Protein::Protein(std::string protein_id): protein_id_(protein_id) {
   acid_map_ = pdb_acid_to_fasta_acid();
 }
 
-void Protein::ParsePDBRecord(std::string record) {
-  std::vector<std::string> split_record = vectorize_string(record);
+void Protein::ParsePDBRecord(std::string record, bool& model_read) {
 
+  std::string record_name = record.substr(0, 4);
   // Ignore non-ATOM records
-  if (split_record.front() != "ATOM") {
+  if (record_name != "ATOM") {
     return;
   }
 
-  if (current_residue_id_ != std::stoi(split_record[5])) {
-    amino_acid_chains_[split_record[4]].append(acid_map_[split_record[3]]);
-    current_residue_id_ = std::stoi(split_record[5]);
+  // Prevent multiple readings of the same model
+  if (record == "ENDMDL") {
+    model_read = true;
+  }
+
+  std::string reading_residue_id = record.substr(22, 5);
+  std::string chain_identifier = record.substr(21, 1);
+  std::string residue = record.substr(17, 3);
+  
+  if (current_residue_id_ != reading_residue_id) {
+    amino_acid_chains_[chain_identifier].append(acid_map_[residue]);
+    current_residue_id_ = reading_residue_id;
   }
 
 }
