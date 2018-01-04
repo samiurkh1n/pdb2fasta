@@ -33,10 +33,10 @@ int main(int argc, char* argv[]) {
 
   Protein protein(protein_id);
   std::string record = "";
-  bool model_read = false;
   while(std::getline(pdb_file, record)) {
-    protein.ParsePDBRecord(record, model_read);
-    if (model_read) break;
+    if (!(protein.ParsePDBRecord(record))) {
+      break;
+    }
   }
 
   fasta_file << protein.GenerateFASTAofAminoAcids();

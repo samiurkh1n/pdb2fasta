@@ -37,17 +37,16 @@ Protein::Protein(std::string protein_id): protein_id_(protein_id) {
   acid_map_ = pdb_acid_to_fasta_acid();
 }
 
-void Protein::ParsePDBRecord(std::string record, bool& model_read) {
+bool Protein::ParsePDBRecord(std::string record) {
 
   std::string record_name = record.substr(0, 4);
-  // Ignore non-ATOM records
+  // Ignore non-ATOM records. Return true because we keep reading
+  // Return false if we hit an ENDMDL record
   if (record_name != "ATOM") {
-    return;
-  }
-
-  // Prevent multiple readings of the same model
-  if (record == "ENDMDL") {
-    model_read = true;
+    if (record.substr(0,6) == "ENDMDL") {
+      return false;
+    }
+    return true;
   }
 
   std::string reading_residue_id = record.substr(22, 5);
@@ -58,7 +57,7 @@ void Protein::ParsePDBRecord(std::string record, bool& model_read) {
     amino_acid_chains_[chain_identifier].append(acid_map_[residue]);
     current_residue_id_ = reading_residue_id;
   }
-
+  return true;
 }
 
 std::string Protein::GenerateFASTAofAminoAcids() {

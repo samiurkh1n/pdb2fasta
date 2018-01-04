@@ -15,7 +15,9 @@ public:
 
   // Parses ATOM record from a PDB file and stores the amino acid of a residue.
   // The function is sensitive to the residue identifier.
-  void ParsePDBRecord(std::string record, bool& model_read);
+  // Returns false if it reaches the end of a model (ex: if it reads a record
+  // of type "ENDMDL")
+  bool ParsePDBRecord(std::string record);
 
   // Generates the FASTA formatted string of the amino acids.
   std::string GenerateFASTAofAminoAcids();
