@@ -5,6 +5,7 @@
 #define PDB2FASTA_UTIL_H
 
 #include <string>
+#include <map>
 #include <unordered_map>
 #include <vector>
 
@@ -22,7 +23,7 @@ public:
 private:
   // Each pair in the vector below is the chain associated with a residue
   // The first is the pair's identifier and the second is the chain
-  std::unordered_map<std::string, std::string> amino_acid_chains_;
+  std::map<std::string, std::string> amino_acid_chains_;
 
   // Maps PDB Amino Acid Code to the FASTA equivalent
   // Note: doesn't handle FASTA symbols: X, *, -, or U
